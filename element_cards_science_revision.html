@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Element Cards - Year 9 Chemistry Revision for Renee</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            mono: ['Space Grotesk', 'monospace'],
+          },
+          colors: {
+            reactive: '#ef4444',
+            alkali: '#f97316',
+            alkaline: '#eab308',
+            metalloid: '#10b981',
+            nonmetal: '#3b82f6',
+            halogen: '#8b5cf6',
+            noble: '#ec4899',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom CSS animations and card flip styles */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    
+    /* Glowing neon accents */
+    .glow-box {
+      box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.3);
+    }
+    .glow-text {
+      text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    @keyframes pulse-subtle {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.03); opacity: 1; }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 3s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="h-full font-sans antialiased bg-slate-950 text-slate-100 flex flex-col min-h-screen relative overflow-x-hidden">
+
+  <!-- Background Particle Canvas -->
+  <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+  <!-- App Wrapper -->
+  <div class="relative z-10 flex flex-col min-h-screen">
+
+    <!-- Top Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-600 flex items-center justify-center font-mono font-bold text-xl text-white shadow-lg shadow-indigo-500/30">
+            <sup>1</sup>H<sup>10</sup>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold bg-gradient-to-r from-cyan-400 via-sky-200 to-purple-400 bg-clip-text text-transparent leading-none">
+              Element Cards
+            </h1>
+            <p class="text-xs text-slate-400">Year 9 Chemistry • HK Curriculum</p>
+          </div>
+        </div>
+
+        <!-- Greeting Badge & Sound Toggle -->
+        <div class="flex items-center space-x-3">
+          <div class="hidden sm:flex items-center space-x-2 bg-indigo-950/60 border border-indigo-800/50 px-3 py-1.5 rounded-full text-xs font-medium text-indigo-300">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>Welcome back, <strong class="text-white">Renee!</strong> 👋</span>
+          </div>
+
+          <button id="sound-btn" onclick="toggleSound()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 transition-all flex items-center justify-center text-sm" title="Toggle Sound">
+            <span id="sound-icon">🔊</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col space-y-6">
+
+      <!-- Renee Banner Greeting (Mobile + Desktop friendly) -->
+      <div class="bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-slate-900/80 border border-indigo-500/20 rounded-2xl p-5 sm:p-6 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="space-y-1 text-center md:text-left">
+          <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center justify-center md:justify-start gap-2">
+            Hi Renee! Ready to master Elements 1 to 10? 🧪✨
+          </h2>
+          <p class="text-sm text-slate-300 max-w-2xl">
+            Explore Hydrogen through Neon. Master symbols, atomic numbers, electron shells, and real-world chemistry uses with interactive cards & challenges!
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-300">
+          <div class="text-center px-3 border-r border-slate-800">
+            <div id="mastery-score" class="text-lg font-bold text-emerald-400 font-mono">0 / 10</div>
+            <div class="text-[10px] text-slate-400 uppercase tracking-wider">Mastered</div>
+          </div>
+          <div class="text-center px-3">
+            <div id="quiz-high-score" class="text-lg font-bold text-amber-400 font-mono">0</div>
+            <div class="text-[10px] text-slate-400 uppercase tracking-wider">Best Streak</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs / Mode Selector -->
+      <nav class="flex flex-wrap gap-2 border-b border-slate-800 pb-3" id="mode-tabs">
+        <button onclick="switchTab('gallery')" id="tab-gallery" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
+          <span>📑</span>
+          <span>Element Gallery</span>
+        </button>
+        <button onclick="switchTab('flashcards')" id="tab-flashcards" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800">
+          <span>🎴</span>
+          <span>Flashcard Deck</span>
+        </button>
+        <button onclick="switchTab('matching')" id="tab-matching" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800">
+          <span>🧩</span>
+          <span>Memory Match</span>
+        </button>
+        <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800">
+          <span>⚡</span>
+          <span>Quiz Challenge</span>
+        </button>
+        <button onclick="switchTab('bohr')" id="tab-bohr" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800">
+          <span>⚛️</span>
+          <span>Bohr Shell Builder</span>
+        </button>
+      </nav>
+
+      <!-- VIEW 1: ELEMENT GALLERY -->
+      <section id="view-gallery" class="view-panel space-y-4">
+        <!-- Category Filter Legend -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Categories:</span>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="px-2.5 py-1 rounded-md bg-blue-950 border border-blue-600/40 text-blue-300">Non-metal</span>
+            <span class="px-2.5 py-1 rounded-md bg-pink-950 border border-pink-600/40 text-pink-300">Noble Gas</span>
+            <span class="px-2.5 py-1 rounded-md bg-orange-950 border border-orange-600/40 text-orange-300">Alkali Metal</span>
+            <span class="px-2.5 py-1 rounded-md bg-yellow-950 border border-yellow-600/40 text-yellow-300">Alkaline Earth</span>
+            <span class="px-2.5 py-1 rounded-md bg-emerald-950 border border-emerald-600/40 text-emerald-300">Metalloid</span>
+            <span class="px-2.5 py-1 rounded-md bg-purple-950 border border-purple-600/40 text-purple-300">Halogen</span>
+          </div>
+        </div>
+
+        <!-- Element Cards Grid -->
+        <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <!-- Cards injected dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- VIEW 2: FLASHCARD STUDY DECK -->
+      <section id="view-flashcards" class="view-panel hidden space-y-6 max-w-xl mx-auto w-full">
+        <div class="flex items-center justify-between text-sm text-slate-400">
+          <span>Card <span id="fc-index" class="font-bold text-white">1</span> of 10</span>
+          <button onclick="toggleMasteredCurrent()" id="fc-master-btn" class="px-3 py-1 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-xs font-medium transition-all flex items-center gap-1.5">
+            <span id="fc-master-icon">⭐</span>
+            <span id="fc-master-text">Mark as Mastered</span>
+          </button>
+        </div>
+
+        <!-- 3D Card Container -->
+        <div class="perspective-1000 w-full h-[420px] cursor-pointer group" onclick="flipFlashcard()">
+          <div id="flashcard-inner" class="relative w-full h-full transform-style-3d transition-transform duration-500 rounded-3xl border border-slate-800 shadow-2xl bg-slate-900">
+            
+            <!-- CARD FRONT -->
+            <div id="fc-front" class="absolute inset-0 backface-hidden rounded-3xl p-6 flex flex-col justify-between border-2 border-indigo-500/30 bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950">
+              <div class="flex justify-between items-start">
+                <span id="fc-number" class="font-mono text-2xl font-bold text-slate-400">#1</span>
+                <span id="fc-category" class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-900/40 text-blue-300 border border-blue-500/30">Non-metal</span>
+              </div>
+
+              <div class="text-center my-2">
+                <div id="fc-symbol" class="text-7xl font-bold font-mono tracking-tight text-white glow-text my-1">H</div>
+                <div id="fc-name" class="text-2xl font-bold text-slate-200">Hydrogen</div>
+                <div id="fc-mass" class="text-xs font-mono text-slate-400 mt-1">Atomic Mass: 1.008</div>
+              </div>
+
+              <div class="flex justify-center items-center py-2">
+                <!-- Mini Canvas for Bohr animation -->
+                <canvas id="fc-bohr-canvas" width="160" height="160" class="rounded-full bg-slate-950/50 border border-slate-800"></canvas>
+              </div>
+
+              <div class="text-center text-xs text-indigo-400 font-medium flex items-center justify-center gap-1">
+                <span>🔄 Click anywhere to flip & see properties</span>
+              </div>
+            </div>
+
+            <!-- CARD BACK -->
+            <div id="fc-back" class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-6 flex flex-col justify-between border-2 border-purple-500/30 bg-slate-900/95 overflow-y-auto">
+              <div class="space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                  <div>
+                    <h3 id="fc-back-name" class="text-xl font-bold text-white">Hydrogen</h3>
+                    <p id="fc-back-shells" class="text-xs text-purple-300 font-mono">Shells: 1 electron</p>
+                  </div>
+                  <span id="fc-back-state" class="text-2xl" title="State at room temp">💨 Gas</span>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                  <div>
+                    <span class="text-slate-400 font-semibold block uppercase tracking-wider text-[10px]">Electron Configuration</span>
+                    <span id="fc-config" class="font-mono text-indigo-300 text-sm">1</span>
+                  </div>
+
+                  <div>
+                    <span class="text-slate-400 font-semibold block uppercase tracking-wider text-[10px]">Daily Life Connection</span>
+                    <p id="fc-uses" class="text-slate-200">Rocket fuel, clean energy, making water (H₂O).</p>
+                  </div>
+
+                  <div>
+                    <span class="text-slate-400 font-semibold block uppercase tracking-wider text-[10px]">Year 9 Key Facts</span>
+                    <p id="fc-facts" class="text-slate-300 leading-relaxed">Lightest element in the universe. Highly flammable.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center text-xs text-slate-500 pt-2 border-t border-slate-800/80">
+                Tap card to flip back
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex items-center justify-between gap-4">
+          <button onclick="prevFlashcard()" class="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl font-medium text-slate-200 transition-all flex items-center justify-center gap-2">
+            <span>←</span> Previous
+          </button>
+          <button onclick="speakCurrentElement()" class="p-3 bg-indigo-950 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/50 rounded-xl transition-all" title="Hear Name">
+            🔊 Sound
+          </button>
+          <button onclick="nextFlashcard()" class="flex-1 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+            Next <span>→</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- VIEW 3: MATCHING MEMORY GAME -->
+      <section id="view-matching" class="view-panel hidden space-y-4">
+        <!-- Matching Game Top Stats Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+          <div class="flex items-center space-x-6 text-sm">
+            <div>
+              <span class="text-slate-400 block text-xs">Moves</span>
+              <span id="match-moves" class="font-mono text-xl font-bold text-white">0</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-xs">Matches</span>
+              <span id="match-found" class="font-mono text-xl font-bold text-emerald-400">0 / 6</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-xs">Time</span>
+              <span id="match-timer" class="font-mono text-xl font-bold text-cyan-400">00:00</span>
+            </div>
+          </div>
+
+          <button onclick="initMatchingGame()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-all shadow-md">
+            🔄 Restart Game
+          </button>
+        </div>
+
+        <!-- Grid of Cards -->
+        <div id="match-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 min-h-[360px]">
+          <!-- Injected dynamically -->
+        </div>
+      </section>
+
+      <!-- VIEW 4: QUIZ CHALLENGE MODE -->
+      <section id="view-quiz" class="view-panel hidden space-y-6 max-w-2xl mx-auto w-full">
+        <!-- Quiz Header Dashboard -->
+        <div class="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
+          <div class="flex items-center space-x-4">
+            <div class="text-center">
+              <div class="text-xs text-slate-400 uppercase">Score</div>
+              <div id="quiz-score" class="font-mono text-xl font-bold text-emerald-400">0</div>
+            </div>
+            <div class="h-8 w-px bg-slate-800"></div>
+            <div class="text-center">
+              <div class="text-xs text-slate-400 uppercase">Streak</div>
+              <div id="quiz-streak" class="font-mono text-xl font-bold text-amber-400">0 🔥</div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-400">
+            Question <span id="quiz-q-num" class="text-white font-bold">1</span>
+          </div>
+        </div>
+
+        <!-- Quiz Card -->
+        <div id="quiz-card" class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl relative overflow-hidden">
+          <div id="quiz-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-indigo-950 text-indigo-300 border border-indigo-800">
+            Year 9 Concept Question
+          </div>
+
+          <h3 id="quiz-question-text" class="text-lg sm:text-xl font-bold text-white leading-relaxed">
+            Which element has atomic number 6 and forms the basis for organic life?
+          </h3>
+
+          <!-- Options Grid -->
+          <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <!-- Buttons dynamically generated -->
+          </div>
+
+          <!-- Explanation Feedback Box -->
+          <div id="quiz-feedback" class="hidden p-4 rounded-2xl bg-slate-950 border border-slate-800 text-sm space-y-1">
+            <div id="quiz-feedback-title" class="font-bold text-emerald-400">Correct! 🎉</div>
+            <p id="quiz-feedback-body" class="text-slate-300">Carbon has 6 protons and 6 electrons (electron configuration 2,4).</p>
+          </div>
+
+          <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-indigo-600/30">
+            Next Question →
+          </button>
+        </div>
+      </section>
+
+      <!-- VIEW 5: BOHR MODEL BUILDER PUZZLE -->
+      <section id="view-bohr" class="view-panel hidden space-y-6 max-w-4xl mx-auto w-full">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          
+          <!-- Controls & Goal Column -->
+          <div class="md:col-span-5 space-y-5">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400">Interactive Lab</span>
+              <h3 class="text-2xl font-bold text-white">Synthesize Element</h3>
+              <p class="text-xs text-slate-400 mt-1">Add electrons to the correct electron shells (K = max 2, L = max 8) to match the target element!</p>
+            </div>
+
+            <!-- Target Element Selector -->
+            <div class="space-y-2">
+              <label class="text-xs font-medium text-slate-300">Target Element to Build:</label>
+              <select id="bohr-target-select" onchange="changeBohrTarget()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm font-medium text-white focus:outline-none focus:border-indigo-500">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <!-- Target Specs -->
+            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800/80 space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Target Symbol:</span>
+                <span id="bohr-target-symbol" class="font-bold text-cyan-400 font-mono">C</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Atomic Number (Z):</span>
+                <span id="bohr-target-z" class="font-bold text-white font-mono">6</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Target Config:</span>
+                <span id="bohr-target-config" class="font-bold text-purple-400 font-mono">2, 4</span>
+              </div>
+            </div>
+
+            <!-- Electron Placement Actions -->
+            <div class="space-y-2">
+              <div class="text-xs text-slate-400 font-medium">Add / Remove Electrons:</div>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="addElectron(1)" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-200 transition-all flex items-center justify-center gap-1">
+                  <span>+ Shell 1 (K)</span>
+                </button>
+                <button onclick="removeElectron(1)" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-400 transition-all">
+                  <span>- Shell 1</span>
+                </button>
+                <button onclick="addElectron(2)" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-200 transition-all flex items-center justify-center gap-1">
+                  <span>+ Shell 2 (L)</span>
+                </button>
+                <button onclick="removeElectron(2)" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-medium text-slate-400 transition-all">
+                  <span>- Shell 2</span>
+                </button>
+              </div>
+              <button onclick="resetBohrBuilder()" class="w-full py-2 bg-slate-950 hover:bg-slate-800 text-slate-400 border border-slate-800 rounded-xl text-xs transition-all">
+                Clear All Electrons
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Bohr Canvas Column -->
+          <div class="md:col-span-7 flex flex-col items-center justify-center space-y-4">
+            <div class="relative flex items-center justify-center">
+              <canvas id="bohr-builder-canvas" width="320" height="320" class="rounded-3xl bg-slate-950 border-2 border-indigo-500/20 shadow-inner"></canvas>
+            </div>
+
+            <!-- Validation Result Box -->
+            <div id="bohr-status-box" class="w-full max-w-xs text-center p-3 rounded-xl border text-xs font-medium bg-slate-950 border-slate-800 text-slate-400">
+              Current electrons: <span id="bohr-current-count" class="font-bold text-white">0</span> / <span id="bohr-required-count" class="font-bold text-white">6</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Detailed Modal for Gallery Element Click -->
+    <div id="element-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative animate-pulse-subtle">
+        <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold">
+          ✕
+        </button>
+
+        <div class="flex items-center space-x-4 border-b border-slate-800 pb-4">
+          <div id="modal-symbol-box" class="w-16 h-16 rounded-2xl bg-blue-950 border border-blue-500/40 flex items-center justify-center font-mono text-3xl font-bold text-white shadow-lg">
+            H
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="modal-title" class="text-2xl font-bold text-white">Hydrogen</h3>
+              <span id="modal-number" class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">#1</span>
+            </div>
+            <p id="modal-category" class="text-xs font-medium text-blue-400">Non-metal</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px] uppercase">Atomic Mass</span>
+            <span id="modal-mass" class="font-mono text-slate-200 text-sm">1.008</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px] uppercase">Electron Config</span>
+            <span id="modal-config" class="font-mono text-indigo-300 text-sm">1</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px] uppercase">State at RT</span>
+            <span id="modal-state" class="text-slate-200 text-sm">Gas</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px] uppercase">Key Shells</span>
+            <span id="modal-shells" class="text-slate-200 text-sm">K: 1</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div>
+            <span class="font-semibold text-slate-400 uppercase text-[10px]">Everyday Life Connection:</span>
+            <p id="modal-uses" class="text-slate-200 mt-0.5">Found in water, stars, and clean energy hydrogen fuel cells.</p>
+          </div>
+          <div>
+            <span class="font-semibold text-slate-400 uppercase text-[10px]">Year 9 Key Properties & Facts:</span>
+            <p id="modal-facts" class="text-slate-300 mt-0.5">Lightest element. Highly reactive gas.</p>
+          </div>
+        </div>
+
+        <button onclick="closeModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs transition-all">
+          Got it!
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-4 text-center text-xs text-slate-500 mt-auto">
+      Created for Renee • Year 9 Hong Kong Chemistry Periodic Table Revision (Elements 1-10)
+    </footer>
+
+  </div>
+
+  <script>
+    /* ===================================================================
+       1. DATA DEFINITIONS (FIRST 10 ELEMENTS FOR YEAR 9 HK CURRICULUM)
+       =================================================================== */
+    const ELEMENTS = [
+      {
+        number: 1,
+        symbol: "H",
+        name: "Hydrogen",
+        mass: 1.008,
+        category: "nonmetal",
+        categoryName: "Non-metal",
+        shells: [1],
+        config: "1",
+        state: "Gas 💨",
+        uses: "Water (H₂O), rocket fuel, clean energy hydrogen fuel cells.",
+        facts: "Most abundant element in the universe! Very flammable non-metal gas.",
+        color: "#3b82f6"
+      },
+      {
+        number: 2,
+        symbol: "He",
+        name: "Helium",
+        mass: 4.0026,
+        category: "noble",
+        categoryName: "Noble Gas",
+        shells: [2],
+        config: "2",
+        state: "Gas 💨",
+        uses: "Party balloons, cooling MRI machines, scuba diving gas mixes.",
+        facts: "Has a full outer shell (duet rule). Non-reactive noble gas, lighter than air!",
+        color: "#ec4899"
+      },
+      {
+        number: 3,
+        symbol: "Li",
+        name: "Lithium",
+        mass: 6.94,
+        category: "alkali",
+        categoryName: "Alkali Metal",
+        shells: [2, 1],
+        config: "2,1",
+        state: "Solid 🪨",
+        uses: "Rechargeable batteries in smartphones, laptops, and electric vehicles.",
+        facts: "Soft Group 1 Alkali Metal. Has 1 valence electron, reacts vigorously with water!",
+        color: "#f97316"
+      },
+      {
+        number: 4,
+        symbol: "Be",
+        name: "Beryllium",
+        mass: 9.0122,
+        category: "alkaline",
+        categoryName: "Alkaline Earth",
+        shells: [2, 2],
+        config: "2,2",
+        state: "Solid 🪨",
+        uses: "Aerospace components, James Webb Space Telescope mirrors, satellite alloys.",
+        facts: "Group 2 Alkaline Earth Metal. Lightweight, strong, and highly resistant to heat.",
+        color: "#eab308"
+      },
+      {
+        number: 5,
+        symbol: "B",
+        name: "Boron",
+        mass: 10.81,
+        category: "metalloid",
+        categoryName: "Metalloid",
+        shells: [2, 3],
+        config: "2,3",
+        state: "Solid 🪨",
+        uses: "Pyrex heat-resistant lab glassware, fiberglass insulation, eye drops.",
+        facts: "Metalloid exhibiting properties between metals and non-metals.",
+        color: "#10b981"
+      },
+      {
+        number: 6,
+        symbol: "C",
+        name: "Carbon",
+        mass: 12.011,
+        category: "nonmetal",
+        categoryName: "Non-metal",
+        shells: [2, 4],
+        config: "2,4",
+        state: "Solid 🪨",
+        uses: "Pencil lead (graphite), diamond jewelry, basis of all living organisms.",
+        facts: "Can form 4 covalent bonds. Exists as graphite, diamond, and fullerenes!",
+        color: "#3b82f6"
+      },
+      {
+        number: 7,
+        symbol: "N",
+        name: "Nitrogen",
+        mass: 14.007,
+        category: "nonmetal",
+        categoryName: "Non-metal",
+        shells: [2, 5],
+        config: "2,5",
+        state: "Gas 💨",
+        uses: "Food packaging gas (chip bags!), fertilizers, liquid nitrogen cooling.",
+        facts: "Makes up ~78% of Earth's atmosphere. Exists as diatomic N₂ molecules.",
+        color: "#3b82f6"
+      },
+      {
+        number: 8,
+        symbol: "O",
+        name: "Oxygen",
+        mass: 15.999,
+        category: "nonmetal",
+        categoryName: "Non-metal",
+        shells: [2, 6],
+        config: "2,6",
+        state: "Gas 💨",
+        uses: "Respiration/breathing, hospital oxygen tanks, steelmaking combustion.",
+        facts: "Essential for cellular respiration and combustion. Makes up ~21% of air.",
+        color: "#3b82f6"
+      },
+      {
+        number: 9,
+        symbol: "F",
+        name: "Fluorine",
+        mass: 18.998,
+        category: "halogen",
+        categoryName: "Halogen",
+        shells: [2, 7],
+        config: "2,7",
+        state: "Gas 💨",
+        uses: "Fluoride toothpaste to protect tooth enamel, Teflon non-stick pans.",
+        facts: "Group 7 Halogen. Extremely reactive yellow-green gas with 7 valence electrons.",
+        color: "#8b5cf6"
+      },
+      {
+        number: 10,
+        symbol: "Ne",
+        name: "Neon",
+        mass: 20.180,
+        category: "noble",
+        categoryName: "Noble Gas",
+        shells: [2, 8],
+        config: "2,8",
+        state: "Gas 💨",
+        uses: "Bright glowing neon storefront signs, high-voltage indicators.",
+        facts: "Group 0/8 Noble Gas with a full octet (8 outer electrons). Inert and glows reddish-orange!",
+        color: "#ec4899"
+      }
+    ];
+
+    const QUIZ_QUESTIONS = [
+      {
+        question: "Which element has atomic number 6 and forms the building block of life?",
+        options: ["Nitrogen", "Carbon", "Oxygen", "Boron"],
+        correct: 1,
+        explanation: "Carbon (C) has atomic number 6 (configuration 2,4) and can form strong covalent bonds."
+      },
+      {
+        question: "What is the electron configuration of Fluorine (Atomic Number 9)?",
+        options: ["2, 8", "2, 7", "2, 5", "2, 8, 1"],
+        correct: 1,
+        explanation: "Fluorine has 9 electrons: 2 in the K shell (1st) and 7 in the L shell (2nd)."
+      },
+      {
+        question: "Which of the following is a Group 0/8 Noble Gas with 2 outer electrons in a full duet?",
+        options: ["Hydrogen", "Helium", "Lithium", "Neon"],
+        correct: 1,
+        explanation: "Helium (He) has atomic number 2 with a completely filled 1st shell."
+      },
+      {
+        question: "Renee looks at a lithium battery. Which group on the periodic table does Lithium (Li) belong to?",
+        options: ["Group 1 Alkali Metal", "Group 7 Halogen", "Noble Gas", "Metalloid"],
+        correct: 0,
+        explanation: "Lithium (Atomic number 3, config 2,1) is a Group 1 Alkali Metal."
+      },
+      {
+        question: "Which gas makes up approximately 78% of Earth's air and has atomic number 7?",
+        options: ["Oxygen", "Hydrogen", "Nitrogen", "Helium"],
+        correct: 2,
+        explanation: "Nitrogen (N) has atomic number 7 and forms N₂ gas."
+      },
+      {
+        question: "How many valence (outer shell) electrons does Oxygen (Atomic Number 8) have?",
+        options: ["2", "4", "6", "8"],
+        correct: 2,
+        explanation: "Oxygen's electron configuration is 2,6, meaning it has 6 valence electrons."
+      },
+      {
+        question: "Which element is used in heat-resistant laboratory glassware like Pyrex?",
+        options: ["Beryllium", "Boron", "Neon", "Lithium"],
+        correct: 1,
+        explanation: "Boron (B, Atomic #5) is a metalloid used in borosilicate heat-resistant glass."
+      },
+      {
+        question: "Neon lights glow red-orange when electrified. What is Neon's electron configuration?",
+        options: ["2, 6", "2, 8", "2, 8, 8", "8, 2"],
+        correct: 1,
+        explanation: "Neon (Atomic #10) has 2 electrons in shell 1 and 8 in shell 2 (full octet)."
+      }
+    ];
+
+    /* ===================================================================
+       2. GLOBAL APP STATE & USER PROGRESS
+       =================================================================== */
+    let currentFlashcardIndex = 0;
+    let isCardFlipped = false;
+    let masteredElements = new Set();
+
+    // Sound FX Synthesis
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.15) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.log("Audio not allowed yet");
+      }
+    }
+
+    function playSuccessSound() {
+      playTone(523.25, 'triangle', 0.1); // C5
+      setTimeout(() => playTone(659.25, 'triangle', 0.1), 100); // E5
+      setTimeout(() => playTone(783.99, 'triangle', 0.2), 200); // G5
+    }
+
+    function playFlipSound() {
+      playTone(300, 'sine', 0.08);
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-icon').innerText = soundEnabled ? '🔊' : '🔇';
+    }
+
+    /* ===================================================================
+       3. VIEW SWITCHING LOGIC
+       =================================================================== */
+    function switchTab(viewName) {
+      playTone(400, 'sine', 0.05);
+
+      // Update Tab Styles
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(tab => {
+        tab.className = "tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800";
+      });
+
+      const activeTab = document.getElementById(`tab-${viewName}`);
+      if (activeTab) {
+        activeTab.className = "tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30";
+      }
+
+      // Hide all panels
+      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.add('hidden'));
+
+      // Show target panel
+      const targetPanel = document.getElementById(`view-${viewName}`);
+      if (targetPanel) targetPanel.classList.remove('hidden');
+
+      // Trigger specific view setups
+      if (viewName === 'flashcards') {
+        renderFlashcard();
+      } else if (viewName === 'matching') {
+        initMatchingGame();
+      } else if (viewName === 'quiz') {
+        startQuiz();
+      } else if (viewName === 'bohr') {
+        initBohrBuilder();
+      }
+    }
+
+    /* ===================================================================
+       4. VIEW 1: GALLERY & MODAL
+       =================================================================== */
+    function renderGallery() {
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = '';
+
+      ELEMENTS.forEach(el => {
+        const card = document.createElement('div');
+        const catBg = getCategoryBadgeStyle(el.category);
+
+        card.className = "bg-slate-900/90 border border-slate-800 hover:border-indigo-500/50 rounded-2xl p-4 transition-all hover:-translate-y-1 hover:shadow-xl cursor-pointer flex flex-col justify-between group";
+        card.onclick = () => openModal(el);
+
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <span class="font-mono text-xs font-bold text-slate-500 group-hover:text-slate-300">#${el.number}</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${catBg.badge}">${el.categoryName}</span>
+          </div>
+
+          <div class="text-center my-3">
+            <div class="text-4xl font-bold font-mono text-white mb-1 group-hover:scale-110 transition-transform" style="color:${el.color}">${el.symbol}</div>
+            <div class="font-bold text-sm text-slate-200">${el.name}</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Shells: [${el.config}]</div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-800/80 flex justify-between items-center text-[10px] text-slate-400">
+            <span>Mass: ${el.mass}</span>
+            <span>${el.state}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function getCategoryBadgeStyle(cat) {
+      switch(cat) {
+        case 'nonmetal': return { badge: 'bg-blue-950 text-blue-300 border border-blue-800' };
+        case 'noble': return { badge: 'bg-pink-950 text-pink-300 border border-pink-800' };
+        case 'alkali': return { badge: 'bg-orange-950 text-orange-300 border border-orange-800' };
+        case 'alkaline': return { badge: 'bg-yellow-950 text-yellow-300 border border-yellow-800' };
+        case 'metalloid': return { badge: 'bg-emerald-950 text-emerald-300 border border-emerald-800' };
+        case 'halogen': return { badge: 'bg-purple-950 text-purple-300 border border-purple-800' };
+        default: return { badge: 'bg-slate-800 text-slate-300' };
+      }
+    }
+
+    function openModal(el) {
+      playTone(450, 'sine', 0.08);
+      document.getElementById('modal-symbol-box').innerText = el.symbol;
+      document.getElementById('modal-symbol-box').style.borderColor = el.color;
+      document.getElementById('modal-title').innerText = el.name;
+      document.getElementById('modal-number').innerText = `#${el.number}`;
+      document.getElementById('modal-category').innerText = el.categoryName;
+      document.getElementById('modal-mass').innerText = el.mass;
+      document.getElementById('modal-config').innerText = el.config;
+      document.getElementById('modal-state').innerText = el.state;
+      document.getElementById('modal-shells').innerText = el.shells.map((count, i) => `Shell ${i+1}: ${count}`).join(', ');
+      document.getElementById('modal-uses').innerText = el.uses;
+      document.getElementById('modal-facts').innerText = el.facts;
+
+      document.getElementById('element-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('element-modal').classList.add('hidden');
+    }
+
+    /* ===================================================================
+       5. VIEW 2: FLASHCARD STUDY MODE
+       =================================================================== */
+    function renderFlashcard() {
+      const el = ELEMENTS[currentFlashcardIndex];
+      isCardFlipped = false;
+
+      const inner = document.getElementById('flashcard-inner');
+      inner.classList.remove('rotate-y-180');
+
+      document.getElementById('fc-index').innerText = currentFlashcardIndex + 1;
+      document.getElementById('fc-number').innerText = `#${el.number}`;
+      document.getElementById('fc-symbol').innerText = el.symbol;
+      document.getElementById('fc-symbol').style.color = el.color;
+      document.getElementById('fc-name').innerText = el.name;
+      document.getElementById('fc-mass').innerText = `Atomic Mass: ${el.mass}`;
+      document.getElementById('fc-category').innerText = el.categoryName;
+
+      // Card Back Updates
+      document.getElementById('fc-back-name').innerText = el.name;
+      document.getElementById('fc-back-shells').innerText = `Electron Shells: ${el.config}`;
+      document.getElementById('fc-back-state').innerText = el.state;
+      document.getElementById('fc-config').innerText = el.config;
+      document.getElementById('fc-uses').innerText = el.uses;
+      document.getElementById('fc-facts').innerText = el.facts;
+
+      // Update Mastery Button State
+      updateMasteryBtnUI();
+
+      // Render Mini Canvas Bohr Model on Card Front
+      drawMiniBohrModel(el);
+    }
+
+    function flipFlashcard() {
+      playFlipSound();
+      isCardFlipped = !isCardFlipped;
+      const inner = document.getElementById('flashcard-inner');
+      if (isCardFlipped) {
+        inner.classList.add('rotate-y-180');
+      } else {
+        inner.classList.remove('rotate-y-180');
+      }
+    }
+
+    function nextFlashcard() {
+      currentFlashcardIndex = (currentFlashcardIndex + 1) % ELEMENTS.length;
+      renderFlashcard();
+    }
+
+    function prevFlashcard() {
+      currentFlashcardIndex = (currentFlashcardIndex - 1 + ELEMENTS.length) % ELEMENTS.length;
+      renderFlashcard();
+    }
+
+    function toggleMasteredCurrent() {
+      const el = ELEMENTS[currentFlashcardIndex];
+      if (masteredElements.has(el.number)) {
+        masteredElements.delete(el.number);
+      } else {
+        masteredElements.add(el.number);
+        playSuccessSound();
+      }
+      updateMasteryBtnUI();
+      updateMasteryHeaderScore();
+    }
+
+    function updateMasteryBtnUI() {
+      const el = ELEMENTS[currentFlashcardIndex];
+      const btn = document.getElementById('fc-master-btn');
+      const text = document.getElementById('fc-master-text');
+      const icon = document.getElementById('fc-master-icon');
+
+      if (masteredElements.has(el.number)) {
+        btn.className = "px-3 py-1 rounded-lg border border-emerald-500 bg-emerald-950 text-emerald-300 text-xs font-medium transition-all flex items-center gap-1.5";
+        text.innerText = "Mastered ✓";
+        icon.innerText = "⭐";
+      } else {
+        btn.className = "px-3 py-1 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-all flex items-center gap-1.5";
+        text.innerText = "Mark as Mastered";
+        icon.innerText = "☆";
+      }
+    }
+
+    function updateMasteryHeaderScore() {
+      document.getElementById('mastery-score').innerText = `${masteredElements.size} / 10`;
+    }
+
+    function speakCurrentElement() {
+      const el = ELEMENTS[currentFlashcardIndex];
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(`${el.name}, symbol ${el.symbol}, atomic number ${el.number}`);
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        playTone(500, 'sine', 0.2);
+      }
+    }
+
+    // Mini Animated Canvas for Card Front
+    let fcBohrAnimId = null;
+    function drawMiniBohrModel(el) {
+      const canvas = document.getElementById('fc-bohr-canvas');
+      const ctx = canvas.getContext('2d');
+      let angle = 0;
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+
+        // Draw Nucleus
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.fillStyle = '#6366f1';
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`${el.number}P`, cx, cy);
+
+        // Draw Shells & Electrons
+        const radii = [32, 58];
+        el.shells.forEach((electronCount, shellIdx) => {
+          const r = radii[shellIdx];
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          // Draw electrons on this shell
+          const speedFactor = shellIdx === 0 ? 1 : -0.7;
+          for (let i = 0; i < electronCount; i++) {
+            const eAngle = angle * speedFactor + (i * (2 * Math.PI / electronCount));
+            const ex = cx + r * Math.cos(eAngle);
+            const ey = cy + r * Math.sin(eAngle);
+
+            ctx.beginPath();
+            ctx.arc(ex, ey, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#38bdf8';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        });
+
+        angle += 0.02;
+        fcBohrAnimId = requestAnimationFrame(animate);
+      }
+
+      if (fcBohrAnimId) cancelAnimationFrame(fcBohrAnimId);
+      animate();
+    }
+
+    /* ===================================================================
+       6. VIEW 3: MATCHING MEMORY GAME
+       =================================================================== */
+    let matchDeck = [];
+    let selectedCards = [];
+    let matchesFound = 0;
+    let matchMoves = 0;
+    let matchTimerInterval = null;
+    let secondsElapsed = 0;
+
+    function initMatchingGame() {
+      // Pick 6 random elements from 10
+      const shuffled = [...ELEMENTS].sort(() => 0.5 - Math.random()).slice(0, 6);
+      
+      matchDeck = [];
+      shuffled.forEach(el => {
+        // Card type A: Symbol & Number
+        matchDeck.push({
+          id: `${el.number}-A`,
+          elementId: el.number,
+          content: `${el.symbol}`,
+          subtext: `Atomic #${el.number}`,
+          color: el.color,
+          type: 'symbol'
+        });
+        // Card type B: Name & Daily Use
+        matchDeck.push({
+          id: `${el.number}-B`,
+          elementId: el.number,
+          content: `${el.name}`,
+          subtext: el.uses.split(',')[0],
+          color: el.color,
+          type: 'name'
+        });
+      });
+
+      // Shuffle pairs deck
+      matchDeck.sort(() => 0.5 - Math.random());
+
+      // Reset state
+      selectedCards = [];
+      matchesFound = 0;
+      matchMoves = 0;
+      secondsElapsed = 0;
+      clearInterval(matchTimerInterval);
+
+      document.getElementById('match-moves').innerText = '0';
+      document.getElementById('match-found').innerText = `0 / 6`;
+      document.getElementById('match-timer').innerText = '00:00';
+
+      matchTimerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+        const secs = String(secondsElapsed % 60).padStart(2, '0');
+        document.getElementById('match-timer').innerText = `${mins}:${secs}`;
+      }, 1000);
+
+      renderMatchGrid();
+    }
+
+    function renderMatchGrid() {
+      const grid = document.getElementById('match-grid');
+      grid.innerHTML = '';
+
+      matchDeck.forEach((card, index) => {
+        const cardEl = document.createElement('div');
+        cardEl.className = "perspective-1000 h-28 cursor-pointer";
+        cardEl.onclick = () => handleMatchCardClick(index);
+
+        cardEl.innerHTML = `
+          <div id="match-card-${index}" class="relative w-full h-full transform-style-3d transition-transform duration-300 rounded-2xl border border-slate-800 bg-slate-900 shadow-lg">
+            <!-- BACK (Hidden face) -->
+            <div class="absolute inset-0 backface-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 flex flex-col items-center justify-center text-slate-500 font-mono font-bold text-xl">
+              🧪
+            </div>
+            <!-- FRONT (Revealed face) -->
+            <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl p-2.5 bg-slate-900 border-2 border-indigo-500/40 flex flex-col items-center justify-center text-center">
+              <span class="text-xl font-bold font-mono" style="color: ${card.color}">${card.content}</span>
+              <span class="text-[10px] text-slate-300 mt-1 line-clamp-2">${card.subtext}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(cardEl);
+      });
+    }
+
+    function handleMatchCardClick(index) {
+      const cardObj = matchDeck[index];
+      const cardEl = document.getElementById(`match-card-${index}`);
+
+      // Guard conditions
+      if (selectedCards.length >= 2 || cardObj.isMatched || cardObj.isFlipped) return;
+
+      playFlipSound();
+      cardObj.isFlipped = true;
+      cardEl.classList.add('rotate-y-180');
+      selectedCards.push({ index, cardObj });
+
+      if (selectedCards.length === 2) {
+        matchMoves++;
+        document.getElementById('match-moves').innerText = matchMoves;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const [c1, c2] = selectedCards;
+
+      if (c1.cardObj.elementId === c2.cardObj.elementId) {
+        // MATCH SUCCESS
+        playSuccessSound();
+        c1.cardObj.isMatched = true;
+        c2.cardObj.isMatched = true;
+        matchesFound++;
+
+        document.getElementById('match-found').innerText = `${matchesFound} / 6`;
+
+        // Style matched cards
+        setTimeout(() => {
+          document.getElementById(`match-card-${c1.index}`).classList.add('border-emerald-500', 'bg-emerald-950/40');
+          document.getElementById(`match-card-${c2.index}`).classList.add('border-emerald-500', 'bg-emerald-950/40');
+        }, 300);
+
+        selectedCards = [];
+
+        if (matchesFound === 6) {
+          clearInterval(matchTimerInterval);
+          triggerConfetti();
+        }
+      } else {
+        // MATCH FAIL - Flip back
+        setTimeout(() => {
+          c1.cardObj.isFlipped = false;
+          c2.cardObj.isFlipped = false;
+          document.getElementById(`match-card-${c1.index}`).classList.remove('rotate-y-180');
+          document.getElementById(`match-card-${c2.index}`).classList.remove('rotate-y-180');
+          selectedCards = [];
+        }, 1000);
+      }
+    }
+
+    /* ===================================================================
+       7. VIEW 4: QUIZ CHALLENGE MODE
+       =================================================================== */
+    let quizIndex = 0;
+    let quizScore = 0;
+    let quizStreak = 0;
+    let quizHighScore = 0;
+
+    function startQuiz() {
+      quizIndex = 0;
+      quizScore = 0;
+      quizStreak = 0;
+      document.getElementById('quiz-score').innerText = quizScore;
+      document.getElementById('quiz-streak').innerText = `${quizStreak} 🔥`;
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const q = QUIZ_QUESTIONS[quizIndex % QUIZ_QUESTIONS.length];
+      document.getElementById('quiz-q-num').innerText = `${quizIndex + 1}`;
+      document.getElementById('quiz-question-text').innerText = q.question;
+
+      const feedbackBox = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('quiz-next-btn');
+      feedbackBox.classList.add('hidden');
+      nextBtn.classList.add('hidden');
+
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+
+      q.options.forEach((optText, i) => {
+        const btn = document.createElement('button');
+        btn.className = "quiz-opt-btn p-4 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-left text-sm font-medium text-slate-200 transition-all flex items-center justify-between";
+        btn.onclick = () => handleQuizAnswer(i, q);
+        btn.innerHTML = `
+          <span>${optText}</span>
+          <span class="w-6 h-6 rounded-full border border-slate-700 flex items-center justify-center text-xs font-mono text-slate-500">
+            ${String.fromCharCode(65 + i)}
+          </span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function handleQuizAnswer(selectedIndex, q) {
+      const buttons = document.querySelectorAll('.quiz-opt-btn');
+      buttons.forEach(b => b.disabled = true);
+
+      const feedbackBox = document.getElementById('quiz-feedback');
+      const feedbackTitle = document.getElementById('quiz-feedback-title');
+      const feedbackBody = document.getElementById('quiz-feedback-body');
+      const nextBtn = document.getElementById('quiz-next-btn');
+
+      if (selectedIndex === q.correct) {
+        playSuccessSound();
+        quizScore += 10;
+        quizStreak++;
+        if (quizStreak > quizHighScore) {
+          quizHighScore = quizStreak;
+          document.getElementById('quiz-high-score').innerText = quizHighScore;
+        }
+
+        buttons[selectedIndex].className = "p-4 rounded-xl bg-emerald-950/80 border-2 border-emerald-500 text-left text-sm font-medium text-emerald-200 flex items-center justify-between";
+        feedbackTitle.className = "font-bold text-emerald-400";
+        feedbackTitle.innerText = "Correct! 🎉";
+      } else {
+        playTone(200, 'sawtooth', 0.2);
+        quizStreak = 0;
+        buttons[selectedIndex].className = "p-4 rounded-xl bg-red-950/80 border-2 border-red-500 text-left text-sm font-medium text-red-200 flex items-center justify-between";
+        buttons[q.correct].className = "p-4 rounded-xl bg-emerald-950/50 border border-emerald-500 text-left text-sm font-medium text-emerald-300 flex items-center justify-between";
+        feedbackTitle.className = "font-bold text-red-400";
+        feedbackTitle.innerText = "Not quite! 💡";
+      }
+
+      document.getElementById('quiz-score').innerText = quizScore;
+      document.getElementById('quiz-streak').innerText = `${quizStreak} 🔥`;
+
+      feedbackBody.innerText = q.explanation;
+      feedbackBox.classList.remove('hidden');
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      quizIndex++;
+      renderQuizQuestion();
+    }
+
+    /* ===================================================================
+       8. VIEW 5: BOHR SHELL BUILDER PUZZLE
+       =================================================================== */
+    let bohrTargetElement = ELEMENTS[5]; // Default Carbon
+    let userShells = [0, 0]; // [Shell 1, Shell 2]
+
+    function initBohrBuilder() {
+      const select = document.getElementById('bohr-target-select');
+      select.innerHTML = '';
+
+      ELEMENTS.forEach(el => {
+        const opt = document.createElement('option');
+        opt.value = el.number;
+        opt.innerText = `#${el.number} - ${el.name} (${el.symbol})`;
+        select.appendChild(opt);
+      });
+
+      select.value = bohrTargetElement.number;
+      updateBohrTargetDisplay();
+    }
+
+    function changeBohrTarget() {
+      const val = parseInt(document.getElementById('bohr-target-select').value);
+      bohrTargetElement = ELEMENTS.find(e => e.number === val);
+      userShells = [0, 0];
+      updateBohrTargetDisplay();
+    }
+
+    function updateBohrTargetDisplay() {
+      document.getElementById('bohr-target-symbol').innerText = bohrTargetElement.symbol;
+      document.getElementById('bohr-target-z').innerText = bohrTargetElement.number;
+      document.getElementById('bohr-target-config').innerText = bohrTargetElement.config;
+
+      updateBohrCanvasAndValidation();
+    }
+
+    function addElectron(shellNum) {
+      playTone(600, 'sine', 0.05);
+      if (shellNum === 1 && userShells[0] < 2) {
+        userShells[0]++;
+      } else if (shellNum === 2 && userShells[1] < 8) {
+        userShells[1]++;
+      }
+      updateBohrCanvasAndValidation();
+    }
+
+    function removeElectron(shellNum) {
+      playTone(300, 'sine', 0.05);
+      if (shellNum === 1 && userShells[0] > 0) {
+        userShells[0]--;
+      } else if (shellNum === 2 && userShells[1] > 0) {
+        userShells[1]--;
+      }
+      updateBohrCanvasAndValidation();
+    }
+
+    function resetBohrBuilder() {
+      userShells = [0, 0];
+      updateBohrCanvasAndValidation();
+    }
+
+    function updateBohrCanvasAndValidation() {
+      const totalUser = userShells[0] + userShells[1];
+      const targetTotal = bohrTargetElement.number;
+
+      document.getElementById('bohr-current-count').innerText = totalUser;
+      document.getElementById('bohr-required-count').innerText = targetTotal;
+
+      const statusBox = document.getElementById('bohr-status-box');
+
+      // Check validation
+      const matchShell1 = userShells[0] === bohrTargetElement.shells[0];
+      const matchShell2 = (bohrTargetElement.shells[1] || 0) === userShells[1];
+
+      if (matchShell1 && matchShell2) {
+        playSuccessSound();
+        triggerConfetti();
+        statusBox.className = "w-full max-w-xs text-center p-3 rounded-xl border text-xs font-semibold bg-emerald-950 border-emerald-500 text-emerald-300";
+        statusBox.innerText = `Perfect! You built ${bohrTargetElement.name}! 🎉 (${bohrTargetElement.config})`;
+      } else {
+        statusBox.className = "w-full max-w-xs text-center p-3 rounded-xl border text-xs font-medium bg-slate-950 border-slate-800 text-slate-400";
+        statusBox.innerHTML = `Current configuration: <strong class="text-white">${userShells[0]}, ${userShells[1]}</strong>`;
+      }
+
+      drawBuilderCanvas();
+    }
+
+    function drawBuilderCanvas() {
+      const canvas = document.getElementById('bohr-builder-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+
+      // Draw Nucleus
+      ctx.beginPath();
+      ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+      ctx.fillStyle = bohrTargetElement.color;
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 14px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${bohrTargetElement.number} P+`, cx, cy);
+
+      // Shell Radii
+      const radii = [65, 115];
+
+      // Shell 1 (K Shell)
+      ctx.beginPath();
+      ctx.arc(cx, cy, radii[0], 0, Math.PI * 2);
+      ctx.strokeStyle = userShells[0] === bohrTargetElement.shells[0] ? '#10b981' : '#475569';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      for (let i = 0; i < userShells[0]; i++) {
+        const angle = (i * (2 * Math.PI / 2)) - Math.PI / 2;
+        const ex = cx + radii[0] * Math.cos(angle);
+        const ey = cy + radii[0] * Math.sin(angle);
+
+        ctx.beginPath();
+        ctx.arc(ex, ey, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // Shell 2 (L Shell)
+      if (bohrTargetElement.number > 2 || userShells[1] > 0) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radii[1], 0, Math.PI * 2);
+        ctx.strokeStyle = (bohrTargetElement.shells[1] || 0) === userShells[1] ? '#10b981' : '#475569';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        for (let i = 0; i < userShells[1]; i++) {
+          const angle = (i * (2 * Math.PI / 8)) - Math.PI / 2;
+          const ex = cx + radii[1] * Math.cos(angle);
+          const ey = cy + radii[1] * Math.sin(angle);
+
+          ctx.beginPath();
+          ctx.arc(ex, ey, 8, 0, Math.PI * 2);
+          ctx.fillStyle = '#a855f7';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+      }
+    }
+
+    /* ===================================================================
+       9. BACKGROUND CANVAS PARTICLES & CONFETTI REWARDS
+       =================================================================== */
+    function initBgParticles() {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+      const symbols = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', '⚛️', '✨'];
+
+      for (let i = 0; i < 25; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          symbol: symbols[Math.floor(Math.random() * symbols.length)],
+          size: Math.random() * 14 + 10,
+          opacity: Math.random() * 0.3 + 0.1
+        });
+      }
+
+      function animateBg() {
+        ctx.clearRect(0, 0, width, height);
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.fillStyle = `rgba(148, 163, 184, ${p.opacity})`;
+          ctx.font = `${p.size}px monospace`;
+          ctx.fillText(p.symbol, p.x, p.y);
+        });
+
+        requestAnimationFrame(animateBg);
+      }
+
+      animateBg();
+    }
+
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    /* ===================================================================
+       10. APP INITIALIZATION ON WINDOW LOAD
+       =================================================================== */
+    window.onload = function() {
+      renderGallery();
+      initBgParticles();
+      
+      // Warm User Greeting & Sound Enable on First Touch
+      document.body.addEventListener('click', () => {
+        initAudio();
+      }, { once: true });
+    };
+  </script>
+</body>
+</html>
