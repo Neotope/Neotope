@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A directory of the HTML projects in this repository.">
+  <title>Neotope — HTML Projects</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f4f7fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 3rem 1.25rem;
+      background: radial-gradient(ellipse at top, #e5efff, transparent 55%), #f4f7fb;
+    }
+
+    main { width: min(760px, 100%); margin: 0 auto; }
+
+    .eyebrow {
+      margin: 0 0 .65rem;
+      color: #52627c;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1 { margin: 0; font-size: clamp(2rem, 6vw, 3.25rem); letter-spacing: -.04em; }
+    .intro { margin: .75rem 0 2rem; color: #52627c; line-height: 1.6; }
+
+    .projects { display: grid; gap: .9rem; }
+
+    .project {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.15rem 1.25rem;
+      border: 1px solid #e0e7f0;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .9);
+      color: inherit;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(28, 48, 80, .04);
+      transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+    }
+
+    .project:hover, .project:focus-visible {
+      transform: translateY(-2px);
+      border-color: #8aaef5;
+      box-shadow: 0 8px 24px rgba(28, 48, 80, .1);
+      outline: none;
+    }
+
+    .project strong { display: block; font-size: 1.05rem; }
+    .project span { display: block; margin-top: .25rem; color: #65738a; font-size: .9rem; }
+    .arrow { flex: 0 0 auto; color: #315fc2; font-size: 1.25rem; }
+
+    footer { margin-top: 1.5rem; color: #65738a; font-size: .85rem; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Neotope · HTML collection</p>
+    <h1>Explore the projects</h1>
+    <p class="intro">Choose a page below to open one of the HTML projects in this repository.</p>
+
+    <nav class="projects" aria-label="HTML projects">
+      <a class="project" href="connect_4_for_mrs_lee.html">
+        <div>
+          <strong>Connect 4 for Mrs. Lee</strong>
+          <span>A Connect Four project</span>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="project" href="element_cards_science_revision.html">
+        <div>
+          <strong>Element Cards — Science Revision</strong>
+          <span>A science revision project</span>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="project" href="myfirstwebpage.html">
+        <div>
+          <strong>My First Webpage</strong>
+          <span>An introductory webpage</span>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
+
+    <footer>3 HTML projects</footer>
+  </main>
+</body>
+</html>
